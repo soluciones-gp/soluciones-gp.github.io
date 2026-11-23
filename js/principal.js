@@ -5,6 +5,9 @@
   var video = document.querySelector('[data-hero-video]');
   var btn = document.querySelector('[data-hero-toggle]');
   var btnText = document.querySelector('[data-hero-toggle-text]');
+  var ctrl = document.querySelector('[data-hero-ctrl]');
+  var snd = document.querySelector('[data-hero-sound]');
+  var sndText = document.querySelector('[data-hero-sound-text]');
   if (video) {
     var conn = navigator.connection || {};
     var small = window.matchMedia('(max-width: 800px)').matches;
@@ -12,8 +15,16 @@
     if (!skip) {
       video.src = small ? video.getAttribute('data-src-sd') : video.getAttribute('data-src-hd');
       video.muted = true; video.defaultMuted = true;
-      video.addEventListener('playing', function () { video.classList.add('is-ready'); if (btn) btn.hidden = false; }, { once: true });
+      video.addEventListener('playing', function () { video.classList.add('is-ready'); if (ctrl) ctrl.hidden = false; }, { once: true });
       var p = video.play(); if (p && p.catch) p.catch(function () { /* sin autoplay: se queda el póster */ });
+      if (snd) snd.addEventListener('click', function () {
+        var on = video.muted; // estaba en silencio: se activa el sonido
+        video.muted = !on; video.defaultMuted = !on;
+        if (on) video.volume = 1;
+        snd.setAttribute('aria-pressed', on ? 'true' : 'false');
+        snd.setAttribute('aria-label', on ? 'Silenciar el video de bienvenida' : 'Activar sonido del video de bienvenida');
+        sndText.textContent = on ? 'Silenciar' : 'Activar sonido';
+      });
       if (btn) btn.addEventListener('click', function () {
         var paused = btn.getAttribute('aria-pressed') === 'true';
         if (paused) { video.play(); btn.setAttribute('aria-pressed', 'false'); btnText.textContent = 'Pausar video'; }

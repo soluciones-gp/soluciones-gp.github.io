@@ -43,16 +43,21 @@
     <section class="lp-hero" id="inicio" aria-label="Bienvenida">
       <div class="lp-hero__media" aria-hidden="true">
         <video class="lp-hero__video" data-hero-video muted loop playsinline preload="none" poster="media/gp-relleno-hero-poster-1920x1080.jpg"
-               data-src-hd="media/gp-relleno-hero-loop-1920x1080.mp4" data-src-sd="media/gp-relleno-hero-loop-1280x720-ligero.mp4"></video>
+               data-src-hd="media/gp-relleno-hero-loop-audio-1920x1080.mp4" data-src-sd="media/gp-relleno-hero-loop-audio-1280x720-ligero.mp4"></video>
         <div class="lp-hero__shade"></div>
       </div>
       <div class="lp-hero__content">
         <h1>Bienvenidos a <em>Soluciones en Residuos GP</em></h1>
         <a class="lp-scroll" href="#metricas" aria-label="Ver más"><span aria-hidden="true"></span></a>
       </div>
-      <button class="lp-hero__pause" type="button" data-hero-toggle aria-pressed="false" hidden>
-        <span class="lp-hero__pause-ico" aria-hidden="true"></span><span data-hero-toggle-text>Pausar video</span>
-      </button>
+      <div class="lp-hero__ctrl" data-hero-ctrl hidden>
+        <button class="lp-hero__btn lp-hero__sound" type="button" data-hero-sound aria-pressed="false" aria-label="Activar sonido del video de bienvenida">
+          <svg class="lp-hero__sound-ico" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/><path class="lp-s-x" d="M16 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path class="lp-s-on" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg><span data-hero-sound-text>Activar sonido</span>
+        </button>
+        <button class="lp-hero__btn lp-hero__pause" type="button" data-hero-toggle aria-pressed="false">
+          <span class="lp-hero__pause-ico" aria-hidden="true"></span><span data-hero-toggle-text>Pausar video</span>
+        </button>
+      </div>
     </section>
 
     <!-- Métricas -->
