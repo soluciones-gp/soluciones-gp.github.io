@@ -1,13 +1,17 @@
 (function () {
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // --- Video de bienvenida (loop) ---
+  // --- Video de bienvenida (completo, con voz y música; arranca en silencio) ---
   var video = document.querySelector('[data-hero-video]');
   var btn = document.querySelector('[data-hero-toggle]');
   var btnText = document.querySelector('[data-hero-toggle-text]');
   var ctrl = document.querySelector('[data-hero-ctrl]');
   var snd = document.querySelector('[data-hero-sound]');
   var sndText = document.querySelector('[data-hero-sound-text]');
+  function conControles() { // sin autoplay (ahorro de datos, movimiento reducido o bloqueo): controles nativos para verlo con sonido
+    video.controls = true; video.preload = 'metadata'; video.classList.add('is-ready');
+    if (!video.getAttribute('src')) video.src = small ? video.getAttribute('data-src-sd') : video.getAttribute('data-src-hd');
+  }
   if (video) {
     var conn = navigator.connection || {};
     var small = window.matchMedia('(max-width: 800px)').matches;
@@ -16,7 +20,7 @@
       video.src = small ? video.getAttribute('data-src-sd') : video.getAttribute('data-src-hd');
       video.muted = true; video.defaultMuted = true;
       video.addEventListener('playing', function () { video.classList.add('is-ready'); if (ctrl) ctrl.hidden = false; }, { once: true });
-      var p = video.play(); if (p && p.catch) p.catch(function () { /* sin autoplay: se queda el póster */ });
+      var p = video.play(); if (p && p.catch) p.catch(function () { conControles(); });
       if (snd) snd.addEventListener('click', function () {
         var on = video.muted; // estaba en silencio: se activa el sonido
         video.muted = !on; video.defaultMuted = !on;
@@ -30,10 +34,13 @@
         if (paused) { video.play(); btn.setAttribute('aria-pressed', 'false'); btnText.textContent = 'Pausar video'; }
         else { video.pause(); btn.setAttribute('aria-pressed', 'true'); btnText.textContent = 'Reproducir video'; }
       });
-      document.addEventListener('visibilitychange', function () {
-        if (document.hidden) video.pause(); else if (btn && btn.getAttribute('aria-pressed') !== 'true') video.play().catch(function () {});
+      video.addEventListener('ended', function () { // video completo: no se repite solo
+        if (btn) { btn.setAttribute('aria-pressed', 'true'); btnText.textContent = 'Ver de nuevo'; }
       });
-    }
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) video.pause(); else if (btn && btn.getAttribute('aria-pressed') !== 'true' && !video.ended) video.play().catch(function () {});
+      });
+    } else { conControles(); }
   }
 
   // --- Aparición y contadores animados ---
